@@ -29,9 +29,15 @@ class MapInputWidget extends \yii\widgets\InputWidget
 
     public $enableSearchBar = true;
 
+    /**
+     * Custom search bar input id on the form.
+     *
+     * @var type
+     */
+    public $searchBarInputId = false;
+
     public function run()
     {
-
         Yii::setAlias('@kolyunya','@vendor/kolyunya');
 
         // Asset bundle should be configured with the application key
@@ -53,6 +59,7 @@ class MapInputWidget extends \yii\widgets\InputWidget
                 'animateMarker' => $this->animateMarker,
                 'alignMapCenter' => $this->alignMapCenter,
                 'enableSearchBar' => $this->enableSearchBar,
+                'searchBarInputId' => $this->searchBarInputId,
             ]
         );
     }

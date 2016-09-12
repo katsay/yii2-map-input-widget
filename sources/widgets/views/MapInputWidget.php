@@ -23,6 +23,7 @@ echo Html::beginTag(
             'animate-marker' => $animateMarker,
             'align-map-center' => $alignMapCenter,
             'enable-search-bar' => $enableSearchBar,
+            'search-bar-input-id' => $searchBarInputId,
         ],
     ]
 );
@@ -42,6 +43,7 @@ echo Html::beginTag(
         null,
         null,
         [
+            'id' => $id.'-search-bar',
             'class' => 'kolyunya-map-input-widget-search-bar',
         ]
     );

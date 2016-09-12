@@ -52,9 +52,7 @@ function MapInputWidget ( widget )
 {
 
     const inputSelector = 'input.kolyunya-map-input-widget-input';
-
-    const searchBarSelector = 'input.kolyunya-map-input-widget-search-bar';
-
+    
     const canvasSelector = 'div.kolyunya-map-input-widget-canvas';
 
     var self = this;
@@ -68,9 +66,9 @@ function MapInputWidget ( widget )
     var map;
 
     var initializeComponents = function()
-    {
+    {        
         input = $(widget).find(inputSelector).get(0);
-        searchBar = $(widget).find(searchBarSelector).get(0);
+        searchBar = $(widget).find("#" + $(widget).attr('id') + "-search-bar").get(0);
         canvas = $(widget).find(canvasSelector).get(0);
     };
 
@@ -120,7 +118,6 @@ function MapInputWidget ( widget )
                 );
             }
         );
-
     };
 
     var initializeWidget = function()
@@ -136,18 +133,33 @@ function MapInputWidget ( widget )
         var searchBarIsHidden = !searchBarIsEnabled;
         $(searchBar).prop('hidden',searchBarIsHidden);
         searchBarAutocomplete = new google.maps.places.Autocomplete(searchBar);
-        map.controls[google.maps.ControlPosition.TOP_LEFT].push(searchBar);
+        map.controls[google.maps.ControlPosition.TOP_RIGHT].push(searchBar);
+        
+        google.maps.event.addDomListener(searchBar, 'keydown', function(e) { 
+            if (e.keyCode == 13) { 
+                e.preventDefault(); 
+            }
+        }); 
+        
         google.maps.event.addListener(
             searchBarAutocomplete,
             'place_changed',
-            function() {
+            function(e) {                
                 var place = this.getPlace();
+                
                 var placeGeometry = place.geometry;
-                if ( placeGeometry )
-                {
+                if (placeGeometry) {
                     var placeLocation = placeGeometry.location;
                     self.setPosition(placeLocation);
-                }
+                    
+                    if (place.formatted_address) {
+                        var serchBarInputId = $(widget).data('search-bar-input-id');
+                        if (serchBarInputId) {
+                            var searchBarInput = document.getElementById(serchBarInputId);
+                            searchBarInput.value = place.formatted_address;
+                        }
+                    }                    
+                }                
             }
         );
     }
